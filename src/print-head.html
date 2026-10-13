@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>How Kids Eat</title>
+<style>
+  @page { size: letter; margin: 0.85in 0.9in 0.8in 0.9in; }
+
+  body {
+    font-family: "Palatino", "Palatino Linotype", Georgia, serif;
+    font-size: 11.5pt;
+    line-height: 1.5;
+    color: #000;
+    margin: 0;
+  }
+
+  /* ---------- title page ---------- */
+  .title-page {
+    height: 8.6in;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    page-break-after: always;
+  }
+  .title-page h1 {
+    font-size: 40pt;
+    letter-spacing: 3px;
+    margin: 0 0 6px 0;
+    font-weight: normal;
+  }
+  .title-page .sub {
+    font-size: 15pt;
+    font-style: italic;
+    margin-bottom: 40px;
+  }
+  .title-page .rule {
+    width: 120px;
+    border-top: 1px solid #000;
+    margin: 0 auto 40px auto;
+  }
+  .title-page .meta {
+    font-size: 11pt;
+    line-height: 1.9;
+  }
+  .title-page .credit {
+    font-size: 12.5pt;
+    margin-bottom: 34px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ---------- front matter ---------- */
+  h2.section {
+    font-size: 12pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    margin: 0 0 14px 0;
+  }
+  .cast { margin-bottom: 26px; }
+  .cast .row {
+    display: flex;
+    margin-bottom: 5px;
+    page-break-inside: avoid;
+  }
+  .cast .who {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 2.5in;
+    flex: none;
+  }
+  .cast .what { font-style: italic; }
+  .note { margin-bottom: 16px; }
+  .note b { letter-spacing: 0.5px; }
+
+  /* ---------- scenes ---------- */
+  .scene { page-break-before: always; }
+  .scene-head {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .scene-head .kicker {
+    font-size: 9.5pt;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .scene-head .name {
+    font-size: 19pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .scene-head .bar {
+    width: 60px;
+    border-top: 1px solid #000;
+    margin: 12px auto 0 auto;
+  }
+
+  .dir {
+    font-style: italic;
+    margin: 12px 0 12px 0.45in;
+    page-break-inside: avoid;
+  }
+
+  .line {
+    margin: 0 0 10px 0;
+    padding-left: 1.7in;
+    text-indent: -1.7in;
+    page-break-inside: avoid;
+  }
+  .line .c {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .line .p { font-style: italic; }
+
+  .card {
+    text-align: center;
+    margin: 20px 0;
+    page-break-inside: avoid;
+  }
+  .card span {
+    border: 1.5px solid #000;
+    padding: 6px 22px;
+    font-size: 10.5pt;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .end {
+    text-align: center;
+    letter-spacing: 6px;
+    font-size: 14pt;
+    margin-top: 34px;
+  }
+
+  /* ---------- back matter ---------- */
+  .extras { page-break-before: always; }
+  h3.group {
+    font-size: 11pt;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 22px 0 10px 0;
+  }
+  .bit {
+    margin-bottom: 11px;
+    padding-left: 0.3in;
+    page-break-inside: avoid;
+  }
+  .bit b { letter-spacing: 0.3px; }
+  ul.plain { margin: 6px 0 0 0.3in; padding: 0; }
+  ul.plain li { margin-bottom: 6px; }
