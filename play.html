@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script id="fresh">var BUILD=5;(function(){if(location.protocol==="file:")return;fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){if(!j||!j.v||j.v===BUILD)return;var k="hke-fresh-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}var u=new URL(location.href);u.searchParams.set("v",j.v);location.replace(u.toString())}).catch(function(){})})();</script>
+<script id="fresh">var BUILD=6;(function(){if(location.protocol==="file:")return;fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){if(!j||!j.v||j.v===BUILD)return;var k="hke-fresh-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}var u=new URL(location.href);u.searchParams.set("v",j.v);location.replace(u.toString())}).catch(function(){})})();</script>
 <title>How Kids Eat</title>
 <style>
   @page { size: letter; margin: 0.85in 0.9in 0.8in 0.9in; }
@@ -189,7 +189,7 @@
 </style>
 </head>
 <body>
-<div class="topnav"><a href="./">&larr; How Kids Eat</a><a href="How-Kids-Eat.pdf?v=5" download="How Kids Eat.pdf">Download PDF</a></div>
+<div class="topnav"><a href="./">&larr; How Kids Eat</a><a href="How-Kids-Eat.pdf?v=6" download="How Kids Eat.pdf">Download PDF</a></div>
 <div id="notesbar"></div>
 
 <!-- ============ TITLE PAGE ============ -->
@@ -203,7 +203,7 @@
     Sixth Grade Thanksgiving Program<br><br>
     Running time, about 7 minutes<br>
     Cast of 7<br><br>
-    <span class="stamp" id="stamp">Version 5, updated October 21, 2026</span>
+    <span class="stamp" id="stamp">Version 6, updated October 21, 2026</span>
   </div>
 </div>
 
@@ -463,7 +463,17 @@
   const API = "https://api.jobhubgo.com/api/yam/";
   const h = new URLSearchParams(location.hash.slice(1));
   if (h.get("c")) { localStorage.setItem("hke.c", h.get("c")); localStorage.setItem("hke.n", h.get("n") || "Someone"); history.replaceState(null, "", location.pathname); }
-  const KEY = localStorage.getItem("hke.c"), WHO = localStorage.getItem("hke.n");
+  // Anyone with the link can leave notes now (his ask 10-21); the name is asked on the first note.
+  const KEY = localStorage.getItem("hke.c") || "hke-3dcc86e84bba3e92";
+  let WHO = localStorage.getItem("hke.n");
+  function askName() {
+    while (!WHO) {
+      const n = prompt("Your name, so everyone knows who left the note:");
+      if (n === null) return false;
+      if (n.trim()) { WHO = n.trim().slice(0, 40); localStorage.setItem("hke.n", WHO); }
+    }
+    return true;
+  }
   let V = 0;
 
   fetch("version.json?t=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(j => {
@@ -501,6 +511,7 @@
     const b = document.createElement("button");
     b.className = "pen"; b.textContent = "✎"; b.title = "Add a note";
     b.onclick = async () => {
+      if (!askName()) return;
       const t = prompt("Note on: \"" + quote(el).slice(0, 60) + "\"");
       if (!t || !t.trim()) return;
       await save(cur => cur.concat({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), i, quote: quote(el), text: t.trim(), who: WHO, at: new Date().toISOString(), v: V }));
@@ -537,7 +548,7 @@
       placed++;
     }
     const bar = document.getElementById("notesbar");
-    bar.textContent = "Notes on, as " + WHO + ". Tap ✎ after any line. " + placed + " note" + (placed === 1 ? "" : "s") + " so far.";
+    bar.textContent = (WHO ? "Notes on, as " + WHO + ". " : "") + "Tap ✎ after any line to leave a note. " + placed + " note" + (placed === 1 ? "" : "s") + " so far.";
   }
 
   load().then(c => { comments = c || []; draw(); });

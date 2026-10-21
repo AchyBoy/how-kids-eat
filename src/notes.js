@@ -5,7 +5,17 @@
   const API = "https://api.jobhubgo.com/api/yam/";
   const h = new URLSearchParams(location.hash.slice(1));
   if (h.get("c")) { localStorage.setItem("hke.c", h.get("c")); localStorage.setItem("hke.n", h.get("n") || "Someone"); history.replaceState(null, "", location.pathname); }
-  const KEY = localStorage.getItem("hke.c"), WHO = localStorage.getItem("hke.n");
+  // Anyone with the link can leave notes now (his ask 10-21); the name is asked on the first note.
+  const KEY = localStorage.getItem("hke.c") || "hke-3dcc86e84bba3e92";
+  let WHO = localStorage.getItem("hke.n");
+  function askName() {
+    while (!WHO) {
+      const n = prompt("Your name, so everyone knows who left the note:");
+      if (n === null) return false;
+      if (n.trim()) { WHO = n.trim().slice(0, 40); localStorage.setItem("hke.n", WHO); }
+    }
+    return true;
+  }
   let V = 0;
 
   fetch("version.json?t=" + Date.now(), { cache: "no-store" }).then(r => r.json()).then(j => {
@@ -43,6 +53,7 @@
     const b = document.createElement("button");
     b.className = "pen"; b.textContent = "✎"; b.title = "Add a note";
     b.onclick = async () => {
+      if (!askName()) return;
       const t = prompt("Note on: \"" + quote(el).slice(0, 60) + "\"");
       if (!t || !t.trim()) return;
       await save(cur => cur.concat({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), i, quote: quote(el), text: t.trim(), who: WHO, at: new Date().toISOString(), v: V }));
@@ -79,7 +90,7 @@
       placed++;
     }
     const bar = document.getElementById("notesbar");
-    bar.textContent = "Notes on, as " + WHO + ". Tap ✎ after any line. " + placed + " note" + (placed === 1 ? "" : "s") + " so far.";
+    bar.textContent = (WHO ? "Notes on, as " + WHO + ". " : "") + "Tap ✎ after any line to leave a note. " + placed + " note" + (placed === 1 ? "" : "s") + " so far.";
   }
 
   load().then(c => { comments = c || []; draw(); });
