@@ -14,9 +14,13 @@ if "--bump" in sys.argv or ver["v"] == 0:
     ver["v"] += 1
 ver["updated"] = datetime.date.today().strftime("%B %-d, %Y")
 vf.write_text(json.dumps(ver) + "\n")
+FRESH = ('<script id="fresh">var BUILD=%d;(function(){if(location.protocol==="file:")return;'
+         'fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){'
+         'if(!j||!j.v||j.v===BUILD)return;var k="hke-fresh-"+j.v;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}'
+         'var u=new URL(location.href);u.searchParams.set("v",j.v);location.replace(u.toString())}).catch(function(){})})();</script>') % ver["v"]
 
 head = (S / "print-head.html").read_text().replace(
-    '<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">', 1)
+    '<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n' + FRESH, 1)
 nav = ('<div class="topnav"><a href="./">&larr; How Kids Eat</a>'
        f'<a href="How-Kids-Eat.pdf?v={ver["v"]}" download="How Kids Eat.pdf">Download PDF</a></div>\n<div id="notesbar"></div>\n')
 html = (head + (S / "screen.css").read_text() + "</style>\n</head>\n<body>\n" + nav
@@ -30,5 +34,7 @@ idx = (R / "index.html").read_text()
 import re
 idx = re.sub(r'How-Kids-Eat\.pdf(\?v=\d+)?"', f'How-Kids-Eat.pdf?v={ver["v"]}"', idx)
 idx = re.sub(r'<span id="ver">[^<]*</span>', f'<span id="ver">Version {ver["v"]}, updated {ver["updated"]}</span>', idx)
+idx = re.sub(r'<script id="fresh">.*?</script>', '', idx)
+idx = idx.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n' + FRESH, 1)
 (R / "index.html").write_text(idx)
 print("built version", ver["v"], ver["updated"])
